@@ -36,14 +36,17 @@ private:
     Ui::MainWindow *ui;
     void reset();
     void update();
-    bool turn;
+    bool turn = true;
     QString a;
     void writeToArray(int);
     void switchTurn();
     void checkMatch(int,int,int);
     void checkWin();
-
-private:
+    void gameWin(QString);
+    void endGame();
+    bool isGameEnd = false;
     QString board[9];
+
+
 };
 #endif // MAINWINDOW_H

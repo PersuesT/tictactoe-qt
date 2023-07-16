@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <ostream>
+#include <string>
 #include <iostream>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,8 +21,9 @@ void MainWindow::reset(){
     for (int i=0;i<9;i++) {
         board[i] = "";
     }
-
-
+    ui->lblWin->setText("");
+    ui->lblTurn->setText("Player 1's turn");
+    isGameEnd = false;
 }
 void MainWindow::update(){
     ui->btn0->setText(QString(board[0]));
@@ -40,14 +42,20 @@ void MainWindow::checkMatch(int move1,int move2,int move3){
     if (board[move1] == board[move2] &&
         board[move2] == board[move3]) {
 
-        if (board[move1] == "X"){
-         std::cout << "Player 1 wins!" << std::endl;
-        }
-        if (board[move1] == "O") {
-         std::cout << "Player 2 wins!"  << std::endl;
-        }
-    }
+        if (board[move1] == "X") gameWin("Player 1");
+        if (board[move1] == "O") gameWin("Player 2");
 
+    }
+}
+
+void MainWindow::gameWin(QString player){
+    ui->lblWin->setText(player + " Wins");
+    endGame();
+}
+
+void MainWindow::endGame() {
+    isGameEnd = true;
+    ui->lblTurn->setText("");
 }
 
 void MainWindow::checkWin(){
@@ -71,16 +79,18 @@ void MainWindow::on_btn6_clicked(){writeToArray(6);}
 void MainWindow::on_btn7_clicked(){writeToArray(7);}
 void MainWindow::on_btn8_clicked(){writeToArray(8);}
 
-
-
-
 void MainWindow::writeToArray(int btnPos) {
+    if (isGameEnd) return;
+    if (!board[btnPos].isEmpty()) return;
+
     if (turn) {
         a = "X";
         turn = false;
+        ui->lblTurn->setText("Player 2's turn");
     } else {
         a = "O";
         turn = true;
+        ui->lblTurn->setText("Player 1's turn");
     }
     board[btnPos] = a;
 
@@ -88,15 +98,6 @@ void MainWindow::writeToArray(int btnPos) {
     checkWin();
 
 }
-
-
-
-
-
-
-
-
-
 
 void MainWindow::on_actionNew_Game_triggered()
 {
