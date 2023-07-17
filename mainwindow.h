@@ -27,10 +27,7 @@ private slots:
     void on_btn7_clicked();
     void on_btn8_clicked();
 
-
     void on_actionNew_Game_triggered();
-
-
 
 private:
     Ui::MainWindow *ui;
@@ -39,13 +36,15 @@ private:
     bool turn = true;
     QString a;
     void writeToArray(int);
-    void switchTurn();
     void checkMatch(int,int,int);
     void checkWin();
     void gameWin(QString);
     void endGame();
     bool isGameEnd = false;
     QString board[9];
+    bool isDraw();
+    void checkDraw();
+    int move;
 
 
 };

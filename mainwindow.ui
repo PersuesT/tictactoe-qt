@@ -193,7 +193,6 @@
      <string>Menu</string>
     </property>
     <addaction name="actionNew_Game"/>
-    <addaction name="actionDifficulty"/>
    </widget>
    <addaction name="menuMenu"/>
   </widget>

@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <iostream>
 #include <ostream>
 #include <string>
-#include <iostream>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -16,7 +16,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::reset(){
+void MainWindow::reset()
+{
     turn = true;
     for (int i=0;i<9;i++) {
         board[i] = "";
@@ -24,8 +25,10 @@ void MainWindow::reset(){
     ui->lblWin->setText("");
     ui->lblTurn->setText("Player 1's turn");
     isGameEnd = false;
+    move = 1;
 }
-void MainWindow::update(){
+void MainWindow::update()
+{
     ui->btn0->setText(QString(board[0]));
     ui->btn1->setText(QString(board[1]));
     ui->btn2->setText(QString(board[2]));
@@ -37,8 +40,8 @@ void MainWindow::update(){
     ui->btn8->setText(QString(board[8]));
 }
 
-
-void MainWindow::checkMatch(int move1,int move2,int move3){
+void MainWindow::checkMatch(int move1, int move2, int move3)
+{
     if (board[move1] == board[move2] &&
         board[move2] == board[move3]) {
 
@@ -48,17 +51,20 @@ void MainWindow::checkMatch(int move1,int move2,int move3){
     }
 }
 
-void MainWindow::gameWin(QString player){
+void MainWindow::gameWin(QString player)
+{
     ui->lblWin->setText(player + " Wins");
     endGame();
 }
 
-void MainWindow::endGame() {
+void MainWindow::endGame()
+{
     isGameEnd = true;
     ui->lblTurn->setText("");
 }
 
-void MainWindow::checkWin(){
+void MainWindow::checkWin()
+{
     checkMatch(0,1,2);
     checkMatch(3,4,5);
     checkMatch(6,7,8);
@@ -66,7 +72,7 @@ void MainWindow::checkWin(){
     checkMatch(2,4,6);
     checkMatch(0,3,6);
     checkMatch(1,4,7);
-    checkMatch(2,5,8);
+    checkMatch(2, 5, 8);
 }
 
 void MainWindow::on_btn0_clicked(){writeToArray(0);}
@@ -79,9 +85,12 @@ void MainWindow::on_btn6_clicked(){writeToArray(6);}
 void MainWindow::on_btn7_clicked(){writeToArray(7);}
 void MainWindow::on_btn8_clicked(){writeToArray(8);}
 
-void MainWindow::writeToArray(int btnPos) {
-    if (isGameEnd) return;
-    if (!board[btnPos].isEmpty()) return;
+void MainWindow::writeToArray(int btnPos)
+{
+    if (isGameEnd)
+        return;
+    if (!board[btnPos].isEmpty())
+        return;
 
     if (turn) {
         a = "X";
@@ -94,11 +103,27 @@ void MainWindow::writeToArray(int btnPos) {
     }
     board[btnPos] = a;
 
+    move++;
+    checkDraw();
     update();
     checkWin();
-
 }
 
+bool MainWindow::isDraw()
+{
+    if (move < 10) {
+        return false;
+    } else {
+        return true;
+    }
+}
+void MainWindow::checkDraw()
+{
+    if (isDraw()) {
+        ui->lblTurn->setText("");
+        ui->lblWin->setText("Tie Game");
+    }
+}
 void MainWindow::on_actionNew_Game_triggered()
 {
     reset();
